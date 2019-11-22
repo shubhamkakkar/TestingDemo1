@@ -12,11 +12,15 @@ Enzyme.configure({ adapter: new EnzymeAdapter() })
  * this is a factory fn to create a shallow adapter for the App component
  * @function setup
  * @param {object} props 
- * @param {any} state
+ * @param {object} state
  * @returns {ShallowWrapper} 
  */
 
-const setup = (props = {}, state = null) => shallow(<CreateCounterClass  {...props} />)
+const setup = (props = {}, state = null) => {
+    const wrapper = shallow(<CreateCounterClass  {...props} />)
+    if (state) wrapper.setState(state)
+    return wrapper
+}
 
 /**
 * Returns ShallowWrapper containing node(s) with the given data-test value
@@ -36,7 +40,7 @@ it("Runs CreateCounterClass test", () => {
 
 it("renders increment button", () => {
     const wrapper = setup()
-    const counterIncrementButton = wrapperFind(wrapper, "counter-incrementing-button")
+    const counterIncrementButton = wrapperFind(wrapper, "counter-incrementing-button");
 
 })
 
@@ -46,6 +50,21 @@ it("renders counter div", () => {
     expect(displayCounterDiv.length).toBe(1)
 })
 
-it("counter starts with 0", () => { })
+it("counter starts with 0", () => {
+    const wrapper = setup()
+    const initialCounterState = wrapper.state('counter')
+    expect(initialCounterState).toBe(0)
+})
 
-it("click increments counter", () => { })
+it("click increments counter", () => {
+    const counter = 8;
+    const wrapper = setup(null, { counter })
+    const counterIncrementButton = wrapperFind(wrapper, "counter-incrementing-button");
+    counterIncrementButton.simulate('click')
+    wrapper.update();
+    const displayCounterDiv = wrapper.find('[data-test="displayCounterDiv"]')
+    expect(displayCounterDiv.text()).toContain(`Create Counter : ${counter + 1}`)
+
+
+
+})

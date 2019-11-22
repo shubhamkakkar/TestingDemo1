@@ -9,7 +9,7 @@ export default class CreateaCounterClass extends Component {
         return (
             <div data-test="create-counter-class-container" >
                 <div data-test="displayCounterDiv" >Create Counter : {counter}</div>
-                <button data-test="counter-incrementing-button" onClick={() => this.setState({ counter: counter + 1 })} >Click</button>
+                <button data-test="counter-incrementing-button" onClick={() => this.setState({ counter: counter + 1 })}>Click</button>
             </div>
         )
     }
